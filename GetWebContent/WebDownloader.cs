@@ -22,13 +22,13 @@ namespace GetWebContent
         public string strRefer;
  
     }
+
     public class WebDownloader
     {
         private readonly Stack<CrawlerItem> m_Stack = new Stack<CrawlerItem>();
 
         public string GetPageByHttpWebRequest(string url, Encoding encoding)
         {
-
             string result = null;
    
             WebResponse response = null;
@@ -40,12 +40,10 @@ namespace GetWebContent
                 request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)";
                 request.Accept = "image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*";
 
-
                 request.Method = "GET";
                 response = request.GetResponse();
                 reader = new StreamReader(response.GetResponseStream(), encoding);
-                result = reader.ReadToEnd();
-                
+                result = reader.ReadToEnd();                
             }
             catch (Exception ex)
             {
@@ -56,11 +54,12 @@ namespace GetWebContent
                 if (reader != null)
                     reader.Close();
                 if (response != null)
-                    response.Close();
-                
+                    response.Close();                
             }
+
             return result;
         }
+
         public void AddUrlQueue(string strUrl)
         {
             CrawlerItem cI = new CrawlerItem();
@@ -69,9 +68,9 @@ namespace GetWebContent
            
             m_Stack.Push(cI);
         }
+
         public void ClearQueue()
         {
-
             m_Stack.Clear();
         }
 
@@ -86,7 +85,6 @@ namespace GetWebContent
             {
                 CrawlerItem cI = m_Stack.Pop();
 
-
                 string strContent = GetPageByHttpWebRequest(cI.strUrl, encoding);
                
                 pr.strPageContent = strContent;
@@ -94,7 +92,6 @@ namespace GetWebContent
                 return pr;
             }
         }
-
 
     }
 }

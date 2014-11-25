@@ -14,17 +14,38 @@ namespace GetWebContent
 {
     public partial class Frm_Main : Form
     {
-      
+        private WebDownloader m_wd = new WebDownloader();
+
         public Frm_Main()
         {
             InitializeComponent();
         }
-        private WebDownloader m_wd = new WebDownloader();
+        
+         /*
+         站点		--->  CSS路径
+        "Cnblogs"	---> "div#cnblogs_post_body"
+        "Csdn"		---> "div#article_content.article_content"
+        "51CTO"		---> "div.showContent"
+        "Iteye"		---> "div#blog_content.blog_content"
+        "ItPub"		---> "div.Blog_wz1"
+        "ChinaUnix" ---> "div.Blog_wz1"
+         */
+
+        private void Frm_Main_Load(object sender, EventArgs e)
+        {
+            this.textBoxUrl.Text = "http://www.cnblogs.com/ice-river/p/4110799.html";
+            this.textBoxCssPath.Text = "div#cnblogs_post_body";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            GetTitle();
+            GetMainContent();
+        }
 
         private void GetTitle()
         {
-            string strContent
-                = m_wd.GetPageByHttpWebRequest(this.textBoxUrl.Text, Encoding.UTF8);
+            string strContent = m_wd.GetPageByHttpWebRequest(this.textBoxUrl.Text, Encoding.UTF8);
             HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument
             {
                 OptionAddDebuggingAttributes = false,
@@ -48,10 +69,10 @@ namespace GetWebContent
             strTitle = Regex.Replace(strTitle, "[\"]", "").ToString();
             this.textBoxTitle.Text = strTitle.TrimEnd();
         }
+
         private void GetMainContent()
         {
-            string strContent
-                = m_wd.GetPageByHttpWebRequest(this.textBoxUrl.Text, Encoding.UTF8);
+            string strContent = m_wd.GetPageByHttpWebRequest(this.textBoxUrl.Text, Encoding.UTF8);
             HtmlAgilityPack.HtmlDocument htmlDoc = new HtmlAgilityPack.HtmlDocument
             {
                 OptionAddDebuggingAttributes = false,
@@ -70,27 +91,6 @@ namespace GetWebContent
                 this.webBrowser1.DocumentText = this.richTextBox1.Text;
             }
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            GetTitle();
-            GetMainContent();    
-        }
 
-        /*
-  站点		--->  CSS路径
-"Cnblogs"	---> "div#cnblogs_post_body"
-"Csdn"		---> "div#article_content.article_content"
-"51CTO"		---> "div.showContent"
-"Iteye"		---> "div#blog_content.blog_content"
-"ItPub"		---> "div.Blog_wz1"
-"ChinaUnix" ---> "div.Blog_wz1"
-          */
-      
-
-        private void Frm_Main_Load(object sender, EventArgs e)
-        {
-            this.textBoxUrl.Text = "http://www.cnblogs.com/ice-river/p/4110799.html";
-            this.textBoxCssPath.Text = "div#cnblogs_post_body";
-        }
     }
 }
